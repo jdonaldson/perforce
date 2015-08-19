@@ -3245,6 +3245,11 @@ function! s:GetCurrentDepotFile(lineNo)
     endif
     call genutils#RestoreHardPosition('Perforce')
     call genutils#ResetHardPosition('Perforce')
+  elseif match(line, '^//') != -1
+    let depotFile = matchstr(line, '//[^/]\+/[^#]*')
+    let fileNames =split(system("p4 where " . depotFile ))
+    let fileName = remove(fileNames, len(fileNames)-1)
+    echom(fileName)
   endif
   return fileName
 endfunction
